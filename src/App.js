@@ -37,6 +37,10 @@ function App() {
 console.log(data)
   useEffect(() => {
     if (data) {
+      const average = data.reduce((total, next) => total + next.properties.cases, 0) / data.length;
+      const min = Math.min(...data.map((item) => item.properties.cases));
+      const max = Math.max(...data.map((item) => item.properties.cases));
+
       const map = new mapboxgl.Map({
         container: mapboxElRef.current,
         style: 'mapbox://styles/notalemesa/ck8dqwdum09ju1ioj65e3ql3k',
@@ -66,9 +70,8 @@ console.log(data)
         // Add our layer
         map.addLayer({
           id: 'circles',
-          source: 'points', // this should be the id of the source
+          source: 'points', // this should be the id of source
           type: 'circle',
-          // paint properties
           paint: {
             'circle-opacity': 0.75,
             'circle-stroke-width': ['interpolate', ['linear'], ['get', 'cases'], 1, 1, max, 1.75],
@@ -109,7 +112,6 @@ console.log(data)
               '#b10026'
             ]
           }
-          
         });
         const popup = new mapboxgl.Popup({
           closeButton: false,
