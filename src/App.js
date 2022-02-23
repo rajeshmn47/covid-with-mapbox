@@ -17,6 +17,7 @@ function App() {
       .then((r) => r.json())
       .then((data) =>
         data.map((point, index) => ({
+          
           type: 'Feature',
           geometry: {
             type: 'Point',
@@ -36,10 +37,11 @@ function App() {
   const { data } = useSWR('https://corona.lmao.ninja/v2/jhucsse', fetcher);
 console.log(data)
   useEffect(() => {
+   
     if (data) {
-      const average = data.reduce((total, next) => total + next.properties.cases, 0) / data.length;
-      const min = Math.min(...data.map((item) => item.properties.cases));
-      const max = Math.max(...data.map((item) => item.properties.cases));
+      const average = data.reduce((total, next) => total + next.properties.deaths, 0) / data.length;
+      const min = Math.min(...data.map((item) => item.properties.deaths));
+      const max = Math.max(...data.map((item) => item.properties.deaths));
 
       const map = new mapboxgl.Map({
         container: mapboxElRef.current,
@@ -75,27 +77,11 @@ console.log(data)
           paint: {
             'circle-opacity': 0.75,
             'circle-stroke-width': ['interpolate', ['linear'], ['get', 'cases'], 1, 1, max, 1.75],
-            'circle-radius': [
-              'interpolate',
-              ['linear'],
-              ['get', 'cases'],
-              1,
-              min,
-              1000,
-              8,
-              average / 4,
-              10,
-              average / 2,
-              14,
-              average,
-              18,
-              max,
-              50
-            ],
+            
             'circle-color': [
               'interpolate',
               ['linear'],
-              ['get', 'cases'],
+              ['get', 'deaths'],
               min,
               '#ffffb2',
               max / 32,
